@@ -9,7 +9,7 @@ node {
 	stage('buildDockerImage') {
 		withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "DOCKER", usernameVariable: 'DOCKERUSER', passwordVariable: 'DOCKERPASS']]) {
 			sh "echo test ${DOCKERPASS}"
-			sh "docker login -u ${DOCKERUSER} -p ${DOCKERPASS}"
+			sh "docker login -u ${DOCKERUSER} ${DOCKERUSER} -p ${DOCKERPASS}"
 			sh 'docker build  . -t csubbum/calculator:latest'
 			sh 'docker push csubbum/calculator:latest'
 		}
