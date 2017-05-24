@@ -1,0 +1,74 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath ("org.springframework.boot:spring-boot-gradle-plugin:1.3.2.RELEASE")
+    }
+}
+
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+apply plugin: 'maven'                 // Needed for Artifactory
+
+
+group 'com.world'
+version '1.0.0'
+
+// Compilation, Packaging, Code Quality Configs
+
+// Java 8!!!
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// Set the version of Gradle that the command gradlew (Wrapper) will use (Should be set to the latest usually)
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.14'
+}
+
+// Archive the source code (for publication)
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
+
+// Archive the generated JavaDocs (for publication)
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+// Include the Source Code & JavaDoc jars in the list of artifacts to publish to Artifactory
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+repositories {
+    jcenter()
+}
+
+// DEPENDENCIES
+
+dependencies {
+    compile ("org.springframework.boot:spring-boot-starter-web:1.3.2.RELEASE")
+    compile ("org.apache.commons:commons-lang3:3.4")
+    compile ("com.google.code.gson:gson:2.5")
+
+    testCompile ('org.springframework:spring-test:4.2.3.RELEASE')
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+bootRepackage {
+    mainClass = 'com.world.Application'
+}
+
+bootRun {
+	systemProperty 'environment', System.properties['environment']
+}
