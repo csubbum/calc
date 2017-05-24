@@ -3,6 +3,7 @@ node {
 	    checkout scm
 	}	
 	stage('build') {
+		chmod 777 gradlew
 		sh './gradlew clean build'
 	}
 	stage('buildDockerImage') {
