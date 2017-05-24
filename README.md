@@ -17,10 +17,10 @@ java -Denvironment=dev -jar build/libs/calculator-1.0.0.jar
 
 ### Building docker image
 ```
-docker build  . -t csubbum/calculator:latest
+docker build  . -t csubbum/calc:latest
 ```
 
 ### Running docker container
 ```
-docker run -itp 5000:5000 -e "env=prod" csubbum/calculator:latest
+docker run -itp 5000:5000 -e "env=prod" csubbum/calc:latest
 ```
