@@ -1,0 +1,15 @@
+node {
+	stage('checkout') {
+	    checkout scm
+	}	
+	stage('build') {
+		sh './gradlew clean build'
+	}
+	stage('buildDockerImage') {
+		withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "DOCKER", usernameVariable: 'DOCKERUSER', passwordVariable: 'DOCKERPASS']]) {
+			sh "docker login -u ${DOCKERUSER} -p ${DOCKERPASS}"
+			sh 'docker build  . -t csubbum/calculator:latest'
+			SH 'docker push csubbum/calculator:latest'
+		}
+	}
+}
